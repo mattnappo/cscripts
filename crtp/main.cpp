@@ -6,29 +6,37 @@
 
 // implementation code
 
-void VerbsBuffer::write() {
+template <typename T>
+void VerbsBuffer<T>::write_impl(T v) {
   std::puts("ibverbs write");
 }
 
-void VerbsBuffer::read() {
+template <typename T>
+T VerbsBuffer<T>::read_impl() {
   std::puts("ibverbs read");
+  return nullptr;
 }
 
-void LibfabricBuffer::write() {
-  std::puts("libfabric write");
+template <typename T>
+void LibfabricBuffer<T>::write_impl(T v) {
+  val = v;
+  std::cout << "libfabric<" << typeid(T).name() << ">(" << val << ") write" << std::endl;
 }
 
-void LibfabricBuffer::read() {
-  std::puts("libfabric read");
+template <typename T>
+T LibfabricBuffer<T>::read_impl() {
+  std::cout << "libfabric<" << typeid(T).name() << ">(" << val << ") read" << std::endl;
+  return val;
 }
 
 int main() {
-    LibfabricBuffer lf_buf(0);
+    LibfabricBuffer<std::string> lf_buf("start");
     lf_buf.read();
-    lf_buf.write();
+    //lf_buf.write("done");
+    //lf_buf.read();
 
-    VerbsBuffer ib_buf;
-    ib_buf.read();
-    ib_buf.write();
+    //VerbsBuffer<int> ib_buf;
+    //ib_buf.read();
+    //ib_buf.write(15);
 }
 

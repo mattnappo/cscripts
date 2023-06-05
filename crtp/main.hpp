@@ -1,31 +1,40 @@
 #ifndef __MAIN_HPP__
 #define __MAIN_HPP__
 
-template <class D>
+template <typename D, typename T>
 struct Buffer {
-  void write() {
-    static_cast<D*>(this)->write();
+  void write(T val) {
+    std::cout << "log write" << std::endl;
+    static_cast<D*>(this)->write(val);
+    std::cout << std::endl;
   }
 
-  void read() {
+  T read() {
     // Shared code here
-    static_cast<D*>(this)->read(); // Specific code
+    std::cout << "log read" << std::endl;
+    return static_cast<D*>(this)->read(); // Specific code
     // More shared code
   }
 };
 
-struct LibfabricBuffer : Buffer<LibfabricBuffer> {
-  int i;
+template <typename T>
+struct LibfabricBuffer : Buffer<LibfabricBuffer<T>, T> {
+  T val;
 
-  LibfabricBuffer(int i) : i(i) {}
-  void write();
-  void read();
+  LibfabricBuffer(T v) : val(v) {}
+  void write_impl(T val);
+  T read_impl();
 };
 
-struct VerbsBuffer : Buffer<VerbsBuffer> {
-  VerbsBuffer() {}
-  void write();
-  void read();
+
+template <typename T>
+struct VerbsBuffer : Buffer<VerbsBuffer<T>, T> {
+  T val;
+  int c;
+
+  VerbsBuffer() : val{}, c(0) {}
+  void write_impl(T v);
+  T read_impl();
 };
 
 #endif
