@@ -5,14 +5,13 @@ template <typename D, typename T>
 struct Buffer {
   void write(T val) {
     std::cout << "log write" << std::endl;
-    static_cast<D*>(this)->write(val);
-    std::cout << std::endl;
+    static_cast<D*>(this)->write_impl(val);
   }
 
   T read() {
     // Shared code here
     std::cout << "log read" << std::endl;
-    return static_cast<D*>(this)->read(); // Specific code
+    return static_cast<D*>(this)->read_impl(); // Specific code
     // More shared code
   }
 };

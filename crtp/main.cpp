@@ -8,13 +8,15 @@
 
 template <typename T>
 void VerbsBuffer<T>::write_impl(T v) {
-  std::puts("ibverbs write");
+  val = v;
+  ++c;
+  std::cout << "ibverbs<" << typeid(T).name() << ">(" << val << "," << c << ") write" << std::endl;
 }
 
 template <typename T>
 T VerbsBuffer<T>::read_impl() {
-  std::puts("ibverbs read");
-  return nullptr;
+  std::cout << "ibverbs<" << typeid(T).name() << ">(" << val << "," << c << ") read" << std::endl;
+  return val;
 }
 
 template <typename T>
@@ -32,11 +34,12 @@ T LibfabricBuffer<T>::read_impl() {
 int main() {
     LibfabricBuffer<std::string> lf_buf("start");
     lf_buf.read();
-    //lf_buf.write("done");
-    //lf_buf.read();
+    lf_buf.write("done");
+    lf_buf.read();
 
-    //VerbsBuffer<int> ib_buf;
-    //ib_buf.read();
-    //ib_buf.write(15);
+    VerbsBuffer<int> ib_buf;
+    ib_buf.read();
+    ib_buf.write(15);
+    ib_buf.write(17);
 }
 
