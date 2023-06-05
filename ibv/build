@@ -1,0 +1,3 @@
+#!/bin/bash
+
+g++ -o info.out info.cpp -g -Wall -libverbs && ./info.out
