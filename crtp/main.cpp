@@ -31,15 +31,23 @@ T LibfabricBuffer<T>::read_impl() {
   return val;
 }
 
-int main() {
-    LibfabricBuffer<std::string> lf_buf("start");
-    lf_buf.read();
-    lf_buf.write("done");
-    lf_buf.read();
+template <class Buf, typename T>
+void proc(Buf &buf, T v) {
+  buf.write(v);
+}
 
-    VerbsBuffer<int> ib_buf;
-    ib_buf.read();
-    ib_buf.write(15);
-    ib_buf.write(17);
+int main() {
+  LibfabricBuffer<std::string> lf_buf("start");
+  lf_buf.read();
+  lf_buf.write("done");
+  lf_buf.read();
+
+  VerbsBuffer<int> ib_buf;
+  ib_buf.read();
+  ib_buf.write(15);
+  ib_buf.write(17);
+
+  proc(ib_buf, 1000000);
+  proc(lf_buf, "nothing");
 }
 
